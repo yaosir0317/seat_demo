@@ -1,0 +1,87 @@
+from django.contrib import auth
+from django.shortcuts import render, redirect, HttpResponse
+
+# Create your views here.
+
+from .models import *
+import datetime
+import json
+from django.http import JsonResponse
+
+
+def index(request):
+    # 当前访问日期:年/月/日
+    current_date = datetime.datetime.now().date()
+    # 获取前端需展示预定信息的日期,无则为当天访问日期
+    book_date = request.GET.get("book_date", current_date)
+    # 会议室所允许预定的时间段列表
+    time_choices = Book.time_choices
+    # 会议室列表
+    room_list = Room.objects.all()
+    # 获取已经被预定的会议室信息列表,[{'room_id': , 'time_id': , 'user__username': ''},{...}]
+    books = list(
+        Book.objects.filter(
+            date=book_date).values(
+            "room_id",
+            "time_id",
+            "user__username"))
+    books = json.dumps(books)
+
+    return render(request, 'index.html', locals())
+
+
+def book(request):
+    print(request.POST)
+    response = {'status': True, 'msg': None, 'data': None}
+    try:
+        choice_date = request.POST.get('choose_date')
+        post_data = json.loads(request.POST.get('post_data'))
+
+        # 增加预定
+        book_obj_list = []
+        for room_id, time_list in post_data['ADD'].items():
+            for time_id in time_list:
+                obj = Book(
+                    room_id=room_id,
+                    time_id=time_id,
+                    user_id=request.user.pk,
+                    date=choice_date)
+                book_obj_list.append(obj)
+        Book.objects.bulk_create(book_obj_list)
+
+        # 删除会议室预定信息
+        print(post_data['DEL'])
+        from django.db.models import Q
+        remove_booking = Q()
+        for room_id, time_id_list in post_data['DEL'].items():
+            for time_id in time_id_list:
+                temp = Q()
+                temp.connector = 'AND'
+                temp.children.append(('user_id', request.user.pk,))
+                temp.children.append(('date', choice_date))
+                temp.children.append(('room_id', room_id,))
+                temp.children.append(('time_id', time_id,))
+                remove_booking.add(temp, 'OR')
+
+        if remove_booking:
+            Book.objects.filter(remove_booking).delete()
+
+    except Exception as e:
+
+        response['status'] = False
+        response['msg'] = str(e)
+
+    return JsonResponse(response)
+
+
+def login(request):
+
+    if request.method == "POST":
+        user = request.POST.get("user")
+        pwd = request.POST.get("pwd")
+        user = auth.authenticate(username=user, password=pwd)
+        if user:
+            auth.login(request, user)
+            return redirect("/index/")
+
+    return render(request, "login.html")
