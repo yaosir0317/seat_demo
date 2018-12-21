@@ -9,6 +9,7 @@ import json
 from django.http import JsonResponse
 
 
+# 预定信息api
 def index(request):
     # 当前访问日期:年/月/日
     current_date = datetime.datetime.now().date()
@@ -30,11 +31,20 @@ def index(request):
     return render(request, 'index.html', locals())
 
 
+# 修改预定信息
 def book(request):
-    print(request.POST)
+    """
+    {'post_data': ['{
+        "DEL":{"3":["6"]},
+        "ADD":{"1":["8","10"],"2":["7"],"3":["3","9"]}
+        }'],
+     'choose_date': ['2018 - 12 - 21']}
+    """
     response = {'status': True, 'msg': None, 'data': None}
     try:
+        # 预定日期
         choice_date = request.POST.get('choose_date')
+        # 增加和删除的预定信息
         post_data = json.loads(request.POST.get('post_data'))
 
         # 增加预定
@@ -47,22 +57,24 @@ def book(request):
                     user_id=request.user.pk,
                     date=choice_date)
                 book_obj_list.append(obj)
+        # 批量创建,不用每次save都访问数据库,可以减少数据库压力
         Book.objects.bulk_create(book_obj_list)
 
         # 删除会议室预定信息
-        print(post_data['DEL'])
         from django.db.models import Q
+        # 实例化Q对象
         remove_booking = Q()
         for room_id, time_id_list in post_data['DEL'].items():
             for time_id in time_id_list:
                 temp = Q()
                 temp.connector = 'AND'
+                # 构建同时满足下面四条件的Q对象
                 temp.children.append(('user_id', request.user.pk,))
                 temp.children.append(('date', choice_date))
                 temp.children.append(('room_id', room_id,))
                 temp.children.append(('time_id', time_id,))
+                # 合并条件进行查询,关系为或,合并的每个Q对象都是我们的要删除的预定信息,他们之间不存在查询关系
                 remove_booking.add(temp, 'OR')
-
         if remove_booking:
             Book.objects.filter(remove_booking).delete()
 
