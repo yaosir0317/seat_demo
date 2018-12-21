@@ -2,10 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="44e7b54b-8f3a-483d-baf6-255237b38c21" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app01/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/app01/views.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/db.sqlite3" beforeDir="false" afterPath="$PROJECT_DIR$/db.sqlite3" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/index.html" afterDir="false" />
     </list>
     <ignored path="MRBS.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -60,8 +57,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/app01/views.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="199">
-              <caret line="76" column="46" lean-forward="true" selection-start-line="76" selection-start-column="46" selection-end-line="76" selection-end-column="46" />
+            <state>
+              <caret lean-forward="true" />
               <folding>
                 <element signature="e#0#31#0" expanded="true" />
               </folding>
@@ -154,7 +151,7 @@
     <other-services-enabled>true</other-services-enabled>
     <auto-save>true</auto-save>
   </component>
-  <component name="ProjectFrameBounds">
+  <component name="ProjectFrameBounds" extendedState="1">
     <option name="x" value="-2" />
     <option name="y" value="1" />
     <option name="width" value="1366" />
@@ -294,12 +291,12 @@
       <workItem from="1545289952911" duration="247000" />
       <workItem from="1545292171894" duration="38000" />
       <workItem from="1545292241388" duration="1263000" />
-      <workItem from="1545377897157" duration="3045000" />
+      <workItem from="1545377897157" duration="3585000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="16186000" />
+    <option name="totallyTimeSpent" value="16726000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-2" y="1" width="1366" height="768" extended-state="0" />
@@ -435,8 +432,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/app01/views.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="199">
-          <caret line="76" column="46" lean-forward="true" selection-start-line="76" selection-start-column="46" selection-end-line="76" selection-end-column="46" />
+        <state>
+          <caret lean-forward="true" />
           <folding>
             <element signature="e#0#31#0" expanded="true" />
           </folding>

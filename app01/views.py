@@ -1,12 +1,17 @@
-from django.contrib import auth
-from django.shortcuts import render, redirect, HttpResponse
-
-# Create your views here.
-
-from .models import *
+# python
 import datetime
 import json
+
+# django
 from django.http import JsonResponse
+from django.contrib import auth
+from django.shortcuts import render, redirect
+from django.db.models import Q
+
+# mine
+from .models import Book, Room
+
+# Create your views here.
 
 
 # 预定信息api
@@ -61,7 +66,6 @@ def book(request):
         Book.objects.bulk_create(book_obj_list)
 
         # 删除会议室预定信息
-        from django.db.models import Q
         # 实例化Q对象
         remove_booking = Q()
         for room_id, time_id_list in post_data['DEL'].items():
